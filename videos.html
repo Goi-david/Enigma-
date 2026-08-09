@@ -1,1 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Videos — Enigma Media</title>
+    <meta name="description" content="Watch exclusive interviews, documentaries, and behind-the-scenes content from Enigma Media." />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+    
+    <style>
+        /* ===== COPY ALL STYLES FROM stories.html ===== */
+        /* (Same styles as stories.html — I'll include them here) */
+        
+        :root {
+            --black: #0a0a0a;
+            --black-light: #111111;
+            --black-card: #1a1a1a;
+            --gold: #d4af37;
+            --gold-dark: #b8962e;
+            --gold-light: #f0d68a;
+            --gold-gradient: linear-gradient(135deg, #d4af37, #b8962e);
+            --white: #ffffff;
+            --off-white: #f5f5f5;
+            --gray: #888888;
+            --gray-light: #2a2a2a;
+            --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.25);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--off-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .gold-text { color: var(--gold); }
+        .section-padding { padding: 80px 0; }
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 4px 16px;
+            border-radius: 50px;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+        .section-sub {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 640px;
+            line-height: 1.7;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            justify-content: center;
+        }
+        .btn-primary {
+            background: var(--gold-gradient);
+            color: var(--black);
+            box-shadow: var(--shadow-gold);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+        .btn-gold-outline {
+            background: transparent;
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+        .btn-gold-outline:hover {
+            background: var(--gold);
+            color: var(--black);
+            transform: translateY(-3px);
+        }
 
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .navbar-brand span { color: var(--gold); }
+        .navbar-brand small {
+            font-size: 0.65rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            color: var(--gray);
+            letter-spacing: 1px;
+            margin-left: 6px;
+            display: none;
+        }
+        @media (min-width: 640px) { .navbar-brand small { display: inline; } }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+        }
+        .nav-links a {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gray);
+            border-radius: 50px;
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .nav-links a.active { color: var(--gold); }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-actions .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            transition: var(--transition);
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .nav-actions .icon-btn:hover {
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 6px;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            max-width: 80%;
+            height: 100vh;
+            background: var(--black-light);
+            padding: 80px 32px 32px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-y: auto;
+        }
+        .mobile-menu.open { right: 0; }
+        .mobile-menu .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.6rem;
+            color: var(--gray);
+        }
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .mobile-menu ul a {
+            display: block;
+            padding: 14px 16px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--off-white);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+        .mobile-menu ul a:hover {
+            background: rgba(212, 175, 55, 0.08);
+            border-left-color: var(--gold);
+            color: var(--gold);
+        }
+        .mobile-menu .social-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .mobile-menu .social-row a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        .mobile-menu .social-row a:hover {
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.12);
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        .overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (min-width: 992px) {
+            .nav-links { display: flex; }
+            .hamburger { display: none; }
+            .mobile-menu,
+            .overlay { display: none !important; }
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            padding: 140px 0 60px;
+            background: var(--black-light);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-weight: 800;
+        }
+        .page-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-top: 8px;
+        }
+
+        /* ===== VIDEOS GRID ===== */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        @media (min-width: 640px) {
+            .videos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .videos-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .video-card {
+            background: var(--black-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        .video-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .video-card .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: var(--black);
+        }
+        .video-card .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-card .video-info {
+            padding: 20px 24px 24px;
+        }
+        .video-card .video-info h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .video-card .video-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        .video-card .video-info .date {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--black-light);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 60px 0 32px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        @media (min-width: 640px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr;
+            }
+        }
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        .footer-brand span { color: var(--gold); }
+        .footer-brand small {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--gray);
+            margin-top: 4px;
+            letter-spacing: 2px;
+        }
+        .footer p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-top: 12px;
+            max-width: 320px;
+        }
+        .footer h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+        .footer ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .footer ul a {
+            font-size: 0.9rem;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+        .footer ul a:hover { color: var(--gold); }
+        .footer-bottom {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        @media (min-width: 640px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .back-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-gold);
+            z-index: 900;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+        .back-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-top:hover {
+            transform: translateY(-4px) scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            .section-padding { padding: 56px 0; }
+            .page-header { padding: 120px 0 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-btn" id="closeMenu" aria-label="Close menu">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="stories.html">Stories</a></li>
+            <li><a href="videos.html" class="active">Videos</a></li>
+            <li><a href="media.html">Media</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="social-row">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+        </div>
+    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                Enigma<span>.</span><small>Media</small>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stories.html">Stories</a></li>
+                <li><a href="videos.html" class="active">Videos</a></li>
+                <li><a href="media.html">Media</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== PAGE HEADER ===== -->
+    <section class="page-header">
+        <div class="container">
+            <span class="section-label">Watch</span>
+            <h1>Enigma <span class="gold-text">Videos</span></h1>
+            <p>Stories brought to life through the lens. Exclusive interviews, documentaries, and behind-the-scenes content.</p>
+        </div>
+    </section>
+
+    <!-- ===== VIDEOS GRID ===== -->
+    <section class="section-padding" style="background: var(--black);">
+        <div class="container">
+            <!-- 
+                ============================================================
+                🔴 VIDEO MANAGEMENT — FOR THE WEBSITE OWNER
+                ============================================================
+                To add a new video, copy the entire <div class="video-card"> 
+                block below and paste it inside the videos-grid.
+                
+                To remove a video, delete its entire block.
+                
+                Each video card uses an iframe. Replace the src URL with
+                your YouTube or Vimeo embed link.
+                
+                Example: 
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+                ============================================================
+            -->
+            
+            <div class="videos-grid" id="videosGrid">
+                <!-- Video 1: Featured Interview -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Featured Interview: Voices of Change</h4>
+                        <p>An inspiring conversation with community leaders shaping the future of storytelling.</p>
+                        <span class="date">Published: August 2026</span>
+                    </div>
+                </div>
+
+                <!-- Video 2: Behind the Scenes -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/9bZkp7q19f0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Behind the Scenes: Enigma Media Studio</h4>
+                        <p>Go behind the scenes and see how we bring powerful stories to life in our studio.</p>
+                        <span class="date">Published: July 2026</span>
+                    </div>
+                </div>
+
+                <!-- Video 3: Documentary -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/5qap5aO4i9A" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Documentary: The Heart of Storytelling</h4>
+                        <p>A deep dive into the art and impact of authentic media in modern Africa.</p>
+                        <span class="date">Published: June 2026</span>
+                    </div>
+                </div>
+
+                <!-- Video 4: Event Coverage -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/8rU-qvyC-sM" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Live Event: Media Innovation Summit</h4>
+                        <p>Highlights from the annual gathering of Africa's top media innovators and creators.</p>
+                        <span class="date">Published: May 2026</span>
+                    </div>
+                </div>
+
+                <!-- Video 5: Short Documentary -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/3JZ_D3ELwOQ" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Short Doc: The Power of Visual Storytelling</h4>
+                        <p>How visual narratives are transforming the way we understand our world.</p>
+                        <span class="date">Published: April 2026</span>
+                    </div>
+                </div>
+
+                <!-- Video 6: Podcast Highlight -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/fJ9rUzIMcZQ" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Podcast Highlight: Conversations That Matter</h4>
+                        <p>Exclusive video highlights from our most impactful podcast episodes.</p>
+                        <span class="date">Published: March 2026</span>
+                    </div>
+                </div>
+
+                <!-- 
+                    ============================================================
+                    📝 HOW TO ADD MORE VIDEOS:
+                    ============================================================
+                    Copy this template and paste it inside the videos-grid div:
+                    
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Your Video Title</h4>
+                            <p>Your video description here.</p>
+                            <span class="date">Published: Month Year</span>
+                        </div>
+                    </div>
+                    ============================================================
+                -->
+            </div>
+
+            <div style="text-align:center; margin-top:48px;">
+                <a href="index.html#videos" class="btn btn-primary">
+                    <i class="fas fa-play-circle"></i> Watch More on Homepage
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        Enigma<span>.</span> <small>Media</small>
+                    </div>
+                    <p>Capture. Create. Inspire.</p>
+                </div>
+                <div>
+                    <h5>Navigate</h5>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="stories.html">Stories</a></li>
+                        <li><a href="videos.html">Videos</a></li>
+                        <li><a href="media.html">Media</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Media</h5>
+                    <ul>
+                        <li><a href="videos.html">Videos</a></li>
+                        <li><a href="media.html">Podcasts</a></li>
+                        <li><a href="media.html">Photography</a></li>
+                        <li><a href="media.html">Live</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Connect</h5>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">YouTube</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Enigma Media. All Rights Reserved.</span>
+                <span>Built with <i class="fas fa-heart" style="color:var(--gold);"></i> in Africa</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== BACK TO TOP ===== -->
+    <button class="back-top" id="backTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // ===== MOBILE MENU =====
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+        const closeMenu = document.getElementById('closeMenu');
+
+        function openMenu() {
+            mobileMenu.classList.add('open');
+            overlay.classList.add('open');
+            hamburger.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenuFn() {
+            mobileMenu.classList.remove('open');
+            overlay.classList.remove('open');
+            hamburger.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', openMenu);
+        closeMenu.addEventListener('click', closeMenuFn);
+        overlay.addEventListener('click', closeMenuFn);
+
+        mobileMenu.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', closeMenuFn);
+        });
+
+        // ===== BACK TO TOP =====
+        const backTop = document.getElementById('backTop');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 400) {
+                backTop.classList.add('visible');
+            } else {
+                backTop.classList.remove('visible');
+            }
+        });
+        backTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== NAVBAR SCROLL =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 50) {
+                navbar.style.background = 'rgba(10,10,10,0.96)';
+                navbar.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+            } else {
+                navbar.style.background = 'rgba(10,10,10,0.92)';
+                navbar.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+            }
+        });
+
+        console.log('🎬 Enigma Media — Videos Page');
+        console.log('📹 To add/remove videos, edit the "videos-grid" section in the HTML.');
+    </script>
+</body>
+</html>
