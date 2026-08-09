@@ -26,7 +26,7 @@
                    ============================================ */
         :root {
             --black: #0a0a0a;
-            --black-light: #141414;
+            --black-light: #111111;
             --black-card: #1a1a1a;
             --gold: #d4af37;
             --gold-dark: #b8962e;
@@ -90,9 +90,6 @@
                    ============================================ */
         .gold-text {
             color: var(--gold);
-        }
-        .gold-border {
-            border-color: var(--gold);
         }
         .section-padding {
             padding: 80px 0;
@@ -183,11 +180,6 @@
             background: var(--gold);
             color: var(--black);
             transform: translateY(-3px);
-        }
-
-        .btn-block {
-            width: 100%;
-            justify-content: center;
         }
 
         /* ============================================
@@ -281,7 +273,7 @@
         .nav-links {
             display: none;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             list-style: none;
         }
         .nav-links a {
@@ -449,7 +441,7 @@
         }
 
         /* ============================================
-                   HERO
+                   HERO WITH ROTATING BANNERS
                    ============================================ */
         .hero {
             min-height: 100vh;
@@ -460,26 +452,73 @@
             overflow: hidden;
             background: var(--black);
         }
-        .hero-bg {
+
+        /* Hero Background Slideshow */
+        .hero-slideshow {
             position: absolute;
             inset: 0;
             z-index: 0;
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
-                var(--black);
+            overflow: hidden;
         }
-        .hero-bg::after {
+        .hero-slideshow .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .hero-slideshow .slide.active {
+            opacity: 1;
+        }
+        .hero-slideshow .slide::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
+            background: rgba(0, 0, 0, 0.65);
+        }
+
+        /* Gradient overlays for depth */
+        .hero-slideshow .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse at 70% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        /* Slide dots indicator */
+        .slide-dots {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            gap: 12px;
+        }
+        .slide-dots .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .slide-dots .dot.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            transform: scale(1.2);
         }
 
         .hero .container {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
         .hero-content {
             max-width: 780px;
@@ -543,7 +582,7 @@
             gap: 14px;
         }
 
-        /* Hero stats */
+        /* Hero stats — stays in background as requested */
         .hero-stats {
             display: flex;
             flex-wrap: wrap;
@@ -682,83 +721,78 @@
         }
 
         /* ============================================
-                   FEATURED VIDEO
+                   VIDEOS SECTION — MANUALLY UPDATED BY OWNER
                    ============================================ */
-        .video-section {
+        .videos-section {
             background: var(--black);
         }
-        .video-wrapper {
+
+        .videos-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 32px;
-            align-items: center;
-            margin-top: 40px;
+            gap: 24px;
+            margin-top: 48px;
         }
-        @media (min-width: 768px) {
-            .video-wrapper {
-                grid-template-columns: 1.3fr 1fr;
+        @media (min-width: 640px) {
+            .videos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .videos-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        .video-player {
-            position: relative;
+        .video-card {
+            background: var(--black-card);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            aspect-ratio: 16 / 9;
-            background: var(--black-card);
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
         }
-        .video-player img {
+        .video-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .video-card .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            background: var(--black);
+        }
+        .video-card .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            border: none;
         }
-        .video-player .play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: rgba(212, 175, 55, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: var(--black);
-            transition: var(--transition);
-            box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.3);
-            animation: ripple 2.5s infinite;
+        .video-card .video-info {
+            padding: 20px 24px 24px;
         }
-        @keyframes ripple {
-            0% {
-                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 0 30px rgba(212, 175, 55, 0);
-            }
-        }
-        .video-player:hover .play-btn {
-            transform: translate(-50%, -50%) scale(1.08);
-        }
-
-        .video-info h3 {
+        .video-card .video-info h4 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 4px;
         }
-        .video-info p {
+        .video-card .video-info p {
+            font-size: 0.9rem;
             color: var(--gray);
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: 24px;
+        }
+        .video-card .video-info .date {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 8px;
+            display: block;
         }
 
         /* ============================================
-                   MEDIA GRID (Podcasts, Videos, Photography, Live)
+                   MEDIA GRID (Podcasts, Photography, Live)
                    ============================================ */
         .media-grid-section {
             background: var(--black-light);
@@ -776,7 +810,7 @@
         }
         @media (min-width: 1024px) {
             .media-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -818,49 +852,6 @@
         }
         .media-card .link:hover {
             gap: 12px;
-        }
-
-        /* ============================================
-                   ABOUT
-                   ============================================ */
-        .about-section {
-            background: var(--black);
-        }
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 40px;
-            align-items: center;
-            margin-top: 40px;
-        }
-        @media (min-width: 768px) {
-            .about-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .about-image {
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            background: var(--black-card);
-            aspect-ratio: 4 / 3;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .about-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .about-text h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        .about-text p {
-            color: var(--gray);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 24px;
         }
 
         /* ============================================
@@ -923,9 +914,52 @@
         }
 
         /* ============================================
-                   SOCIAL / CTA
+                   ABOUT
                    ============================================ */
-        .social-section {
+        .about-section {
+            background: var(--black);
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-top: 40px;
+        }
+        @media (min-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .about-image {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--black-card);
+            aspect-ratio: 4 / 3;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .about-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .about-text p {
+            color: var(--gray);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        /* ============================================
+                   SOCIAL / CTA (Contact)
+                   ============================================ */
+        .contact-section {
             background: var(--black);
             text-align: center;
         }
@@ -1132,9 +1166,6 @@
             .cta-box h3 {
                 font-size: 1.6rem;
             }
-            .video-info h3 {
-                font-size: 1.4rem;
-            }
         }
 
         @media (min-width: 768px) and (max-width: 991px) {
@@ -1161,8 +1192,9 @@
             <i class="fas fa-times"></i>
         </button>
         <ul>
-            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#home">Home</a></li>
             <li><a href="#stories">Stories</a></li>
+            <li><a href="#videos">Videos</a></li>
             <li><a href="#media">Media</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#about">About</a></li>
@@ -1187,6 +1219,7 @@
             <ul class="nav-links">
                 <li><a href="#home" class="active">Home</a></li>
                 <li><a href="#stories">Stories</a></li>
+                <li><a href="#videos">Videos</a></li>
                 <li><a href="#media">Media</a></li>
                 <li><a href="#services">Services</a></li>
                 <li><a href="#about">About</a></li>
@@ -1206,9 +1239,22 @@
         </div>
     </nav>
 
-    <!-- ===== HERO ===== -->
+    <!-- ===== HERO WITH ROTATING BANNERS ===== -->
     <section class="hero" id="home">
-        <div class="hero-bg"></div>
+        <!-- Rotating Background Banners -->
+        <div class="hero-slideshow" id="heroSlideshow">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1600&h=900&fit=crop&crop=center');"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1532619187608-e5375cab36aa?w=1600&h=900&fit=crop&crop=center');"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1589903308904-1010c2294adc?w=1600&h=900&fit=crop&crop=center');"></div>
+        </div>
+
+        <!-- Slide Dots -->
+        <div class="slide-dots" id="slideDots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
@@ -1227,7 +1273,7 @@
                     <a href="#stories" class="btn btn-primary">
                         <i class="fas fa-book-open"></i> Explore Stories
                     </a>
-                    <a href="#video" class="btn btn-outline">
+                    <a href="#videos" class="btn btn-outline">
                         <i class="fas fa-play-circle"></i> Watch Our Media
                     </a>
                 </div>
@@ -1331,45 +1377,110 @@
         </div>
     </section>
 
-    <!-- ===== FEATURED VIDEO ===== -->
-    <section class="video-section section-padding" id="video">
+    <!-- ===== VIDEOS SECTION — MANUALLY UPDATED BY OWNER ===== -->
+    <section class="videos-section section-padding" id="videos">
         <div class="container">
             <span class="section-label">Watch</span>
             <h2 class="section-title">
-                Enigma <span class="gold-text">Media</span>
+                Enigma <span class="gold-text">Videos</span>
             </h2>
             <p class="section-sub">
-                Discover the people, stories, and ideas shaping our community.
+                Stories brought to life through the lens.
             </p>
 
-            <div class="video-wrapper">
-                <div class="video-player" onclick="playVideo()">
-                    <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&h=450&fit=crop&crop=center" alt="Featured Video" loading="lazy" />
-                    <div class="play-btn">
-                        <i class="fas fa-play"></i>
+            <div class="videos-grid" id="videosGrid">
+                <!-- 
+                    =====================================================
+                    🔴 VIDEO MANAGEMENT — FOR THE WEBSITE OWNER
+                    =====================================================
+                    To add, remove, or update videos, simply edit the 
+                    HTML inside the <div class="videos-grid"> section below.
+                    
+                    Each video card follows this pattern:
+                    
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <!-- Replace the src URL with your YouTube/Vimeo embed link -->
+                            <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Video Title Here</h4>
+                            <p>Short description of the video.</p>
+                            <span class="date">Published: Month Year</span>
+                        </div>
+                    </div>
+                    
+                    To add a new video, copy and paste the entire 
+                    <div class="video-card"> block below.
+                    To remove a video, delete its entire block.
+                    =====================================================
+                -->
+
+                <!-- Video 1 -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Featured Interview: Voices of Change</h4>
+                        <p>An inspiring conversation with community leaders shaping the future.</p>
+                        <span class="date">Published: August 2026</span>
                     </div>
                 </div>
-                <div class="video-info">
-                    <h3>Featured Interview</h3>
-                    <p>
-                        In this exclusive conversation, we sit down with
-                        visionary creators and changemakers who are redefining
-                        the media landscape across Africa and beyond.
-                    </p>
-                    <a href="#" class="btn btn-primary">
-                        <i class="fas fa-play-circle"></i> Watch Full Video
-                    </a>
+
+                <!-- Video 2 -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/9bZkp7q19f0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Behind the Scenes: Enigma Media Studio</h4>
+                        <p>Go behind the scenes and see how we bring stories to life.</p>
+                        <span class="date">Published: July 2026</span>
+                    </div>
                 </div>
+
+                <!-- Video 3 -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/5qap5aO4i9A" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Documentary: The Heart of Storytelling</h4>
+                        <p>A deep dive into the art and impact of authentic media.</p>
+                        <span class="date">Published: June 2026</span>
+                    </div>
+                </div>
+
+                <!-- Video 4 — Example of how to add more -->
+                <!-- 
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>Your New Video Title</h4>
+                        <p>Your video description here.</p>
+                        <span class="date">Published: Month Year</span>
+                    </div>
+                </div>
+                -->
+            </div>
+
+            <div style="text-align:center; margin-top:40px;">
+                <a href="#" class="btn btn-primary">
+                    <i class="fas fa-play-circle"></i> Watch All Videos
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- ===== MEDIA GRID ===== -->
+    <!-- ===== MEDIA GRID (Podcasts, Photography, Live) ===== -->
     <section class="media-grid-section section-padding" id="media">
         <div class="container">
             <span class="section-label">Our Media</span>
             <h2 class="section-title">
-                Explore <span class="gold-text">Our Work</span>
+                Explore <span class="gold-text">More</span>
             </h2>
             <p class="section-sub">
                 Stories brought to life across every medium.
@@ -1380,12 +1491,6 @@
                     <div class="icon">🎙️</div>
                     <h4>Podcasts</h4>
                     <p>Conversations that matter.</p>
-                    <a href="#" class="link">View More <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="media-card">
-                    <div class="icon">🎥</div>
-                    <h4>Videos</h4>
-                    <p>Stories brought to life.</p>
                     <a href="#" class="link">View More <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="media-card">
@@ -1498,8 +1603,8 @@
         </div>
     </section>
 
-    <!-- ===== SOCIAL + CTA ===== -->
-    <section class="social-section section-padding" id="contact">
+    <!-- ===== CONTACT / SOCIAL ===== -->
+    <section class="contact-section section-padding" id="contact">
         <div class="container">
             <span class="section-label">Connect</span>
             <h2 class="section-title">
@@ -1547,6 +1652,7 @@
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#stories">Stories</a></li>
+                        <li><a href="#videos">Videos</a></li>
                         <li><a href="#media">Media</a></li>
                         <li><a href="#services">Services</a></li>
                         <li><a href="#about">About</a></li>
@@ -1597,6 +1703,56 @@
             }, 600);
         });
 
+        // ===== HERO SLIDESHOW =====
+        (function() {
+            const slides = document.querySelectorAll('.hero-slideshow .slide');
+            const dots = document.querySelectorAll('.slide-dots .dot');
+            let current = 0;
+            let interval;
+
+            function goTo(index) {
+                // Remove active from all
+                slides.forEach(s => s.classList.remove('active'));
+                dots.forEach(d => d.classList.remove('active'));
+
+                // Add active to current
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+                current = index;
+            }
+
+            function nextSlide() {
+                const next = (current + 1) % slides.length;
+                goTo(next);
+            }
+
+            function startSlideshow() {
+                interval = setInterval(nextSlide, 5000);
+            }
+
+            function stopSlideshow() {
+                clearInterval(interval);
+            }
+
+            // Dot clicks
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function() {
+                    stopSlideshow();
+                    goTo(index);
+                    startSlideshow();
+                });
+            });
+
+            // Start
+            goTo(0);
+            startSlideshow();
+
+            // Pause on hover
+            const hero = document.querySelector('.hero');
+            hero.addEventListener('mouseenter', stopSlideshow);
+            hero.addEventListener('mouseleave', startSlideshow);
+        })();
+
         // ===== MOBILE MENU =====
         const hamburger = document.getElementById('hamburger');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -1621,18 +1777,15 @@
         closeMenu.addEventListener('click', closeMenuFn);
         overlay.addEventListener('click', closeMenuFn);
 
-        // Close menu on link click
         mobileMenu.querySelectorAll('a').forEach(function(link) {
             link.addEventListener('click', closeMenuFn);
         });
 
         // ===== NAVBAR SCROLL =====
         const navbar = document.getElementById('navbar');
-        let lastScroll = 0;
 
         window.addEventListener('scroll', function() {
             const currentScroll = window.pageYOffset;
-
             if (currentScroll > 50) {
                 navbar.style.background = 'rgba(10,10,10,0.96)';
                 navbar.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
@@ -1640,8 +1793,6 @@
                 navbar.style.background = 'rgba(10,10,10,0.92)';
                 navbar.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
             }
-
-            lastScroll = currentScroll;
         });
 
         // ===== BACK TO TOP =====
@@ -1656,16 +1807,8 @@
         });
 
         backTop.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        // ===== VIDEO PLAY (demo) =====
-        function playVideo() {
-            alert('🎬 Video player would open here.\nIn production, this would embed a YouTube/Vimeo video.');
-        }
 
         // ===== ACTIVE NAV LINK ON SCROLL =====
         const sections = document.querySelectorAll('section[id], .hero');
@@ -1688,7 +1831,7 @@
             });
         });
 
-        // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
+        // ===== SMOOTH SCROLL =====
         document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
@@ -1696,16 +1839,14 @@
                 const target = document.querySelector(href);
                 if (target) {
                     e.preventDefault();
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        console.log('🎬 Enigma Media  Capture. Create. Inspire.');
-        
+        console.log('🎬 Enigma Media — Capture. Create. Inspire.');
+        console.log('📹 To add/remove videos, edit the "videos-grid" section in the HTML.');
+        console.log('✨ Built with ❤️ for Africa');
     </script>
 
 </body>
